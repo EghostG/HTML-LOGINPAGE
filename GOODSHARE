@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoodShare — Σύνδεση</title>
+  <style>
+    :root{
+      --blue:#0b6df2;
+      --green:#22c55e;
+      --bg-gradient: linear-gradient(135deg, var(--blue) 0%, #17a2d6 40%, var(--green) 100%);
+      --card-bg: rgba(255,255,255,0.98);
+      --text-dark: #0f172a;
+      --muted: #6b7280;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(2,6,23,0.2);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: var(--bg-gradient);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+    }
+
+    .card{
+      width:100%;
+      max-width:420px;
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px;
+      box-sizing:border-box;
+      border: 1px solid rgba(15,23,42,0.06);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:12px;
+      background: conic-gradient(from 150deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color: white;
+      font-size:20px;
+      box-shadow: 0 6px 18px rgba(12,30,80,0.18);
+      background-image: linear-gradient(135deg, var(--blue), var(--green));
+    }
+
+    h1{font-size:20px;margin:0;color:var(--text-dark);} 
+    p.lead{margin:6px 0 22px;color:var(--muted);font-size:14px}
+
+    form{display:grid;gap:12px}
+
+    label{font-size:13px;color:var(--text-dark);display:block;margin-bottom:6px}
+    .input{
+      width:100%;
+      box-sizing:border-box;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.08);
+      font-size:15px;
+      outline:none;
+      background:#fff;
+    }
+    .input:focus{box-shadow:0 6px 18px rgba(11,109,242,0.14);border-color:var(--blue)}
+
+    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .checkbox{display:flex;align-items:center;gap:8px;color:var(--muted);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:8px;padding:12px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600;font-size:15px;
+      background-image: linear-gradient(90deg, var(--blue), var(--green));
+      color:white;box-shadow: 0 8px 22px rgba(12,30,80,0.18);
+    }
+
+    .secondary{background:transparent;color:var(--blue);border:1px solid rgba(11,109,242,0.12);font-weight:600}
+
+    .small{font-size:13px;color:var(--muted)}
+
+    .hint{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+
+    .error{color:#dc2626;font-size:13px;margin-top:8px}
+
+    /* responsive */
+    @media (max-width:520px){
+      .card{padding:20px;border-radius:12px}
+      .logo{width:48px;height:48px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="main-heading">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">GS</div>
+        <div>
+          <h1 id="main-heading">GoodShare</h1>
+          <p class="lead">Κάνε login για να συνεχίσεις — αντάλλαξε ρούχα εύκολα και με ασφάλεια</p>
+        </div>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" class="input" type="email" placeholder="π.χ. maria@example.com" required aria-required="true">
+        </div>
+
+        <div>
+          <label for="password">Κωδικός</label>
+          <div style="position:relative">
+            <input id="password" name="password" class="input" type="password" minlength="6" placeholder="Εισάγετε τον κωδικό" required aria-required="true">
+            <button type="button" id="togglePwd" aria-label="Εμφάνιση κωδικού" title="Εμφάνιση κωδικού" style="position:absolute;right:8px;top:8px;background:none;border:0;padding:6px;cursor:pointer;font-size:13px;color:var(--muted)">👁️</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="checkbox"><input type="checkbox" id="remember"> Θυμήσου με</label>
+          <a href="#" class="small">Ξέχασες κωδικό;</a>
+        </div>
+
+        <div>
+          <button class="btn" type="submit">Σύνδεση</button>
+        </div>
+
+        <div class="hint">Δεν έχεις λογαριασμό; <a href="#">Εγγραφή</a></div>
+        <div id="feedback" role="status" aria-live="polite"></div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const form = document.getElementById('loginForm');
+      const email = document.getElementById('email');
+      const pwd = document.getElementById('password');
+      const feedback = document.getElementById('feedback');
+      const toggle = document.getElementById('togglePwd');
+
+      toggle.addEventListener('click', ()=>{
+        const type = pwd.type === 'password' ? 'text' : 'password';
+        pwd.type = type;
+        toggle.textContent = type === 'password' ? '👁️' : '🙈';
+      });
+
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        feedback.textContent = '';
+
+        const emailVal = email.value.trim();
+        const pwdVal = pwd.value;
+
+        // basic validation
+        if(!emailVal){
+          feedback.innerHTML = '<p class="error">Παρακαλώ εισάγετε το email σας.</p>';
+          email.focus();
+          return;
+        }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+          feedback.innerHTML = '<p class="error">Το email δεν φαίνεται έγκυρο.</p>';
+          email.focus();
+          return;
+        }
+        if(!pwdVal || pwdVal.length < 6){
+          feedback.innerHTML = '<p class="error">Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.</p>';
+          pwd.focus();
+          return;
+        }
+
+        // Εδώ θα γινόταν κλήση στο backend. Για το demo δείχνουμε επιτυχία.
+        feedback.innerHTML = '<p style="color:var(--green)">Επιτυχής σύνδεση! Φόρτωση...</p>';
+
+        // small UX delay then redirect simulation
+        setTimeout(()=>{
+          // στην πραγματική εφαρμογή κάνεις redirect μετά το login
+          // window.location.href = '/dashboard';
+          feedback.innerHTML = '<p class="small">(Αυτή είναι demo συμπεριφορά — στην παραγωγή θα γίνει πραγματικό login.)</p>';
+        }, 900);
+      });
+
+    })();
+  </script>
+</body>
+</html>
